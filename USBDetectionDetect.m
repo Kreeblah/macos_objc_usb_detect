@@ -91,8 +91,7 @@
 
 -(void) removeConnectedDevice:(UInt32)deviceLocation
 {
-	NSNumber* deviceLocationNumber = [NSNumber numberWithUnsignedInt:(unsigned int)deviceLocation];
-	[connectedUSBDevices removeObjectForKey:deviceLocationNumber];
+	[connectedUSBDevices removeObjectForKey:[NSNumber numberWithUnsignedInt:(unsigned int)deviceLocation]];
 }
 
 -(void) addWatchedDevice:(USBDetectionDevice*)device
