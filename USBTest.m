@@ -38,8 +38,19 @@
 }
 @end
 
+void USBTestSignalHandler(int sigraised)
+{
+	exit(0);
+}
+
 int main(int argc, const char * argv[])
 {
+	sig_t signalHandler = signal(SIGINT, USBTestSignalHandler);
+	if (signalHandler == SIG_ERR)
+	{
+		return EXIT_FAILURE;
+	}
+
 	@autoreleasepool
 	{
 		USBTest* usbTest = [[USBTest alloc] init];

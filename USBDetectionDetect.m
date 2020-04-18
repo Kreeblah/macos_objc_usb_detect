@@ -49,11 +49,6 @@
 	for(USBDetectionDevice* tempDevice in watchedUSBDevices)
 	{
 		io_iterator_t deviceIterator;
-		sig_t signalHandler = signal(SIGINT, CUSBSignalHandler);
-		if (signalHandler == SIG_ERR)
-		{
-			return;
-		}
 
 		CFMutableDictionaryRef matchingDict = IOServiceMatching(kIOUSBDeviceClassName);
 		if (matchingDict == NULL)
@@ -187,10 +182,5 @@ void CUSBDeviceAdded(void *refCon, io_iterator_t iterator)
 
 		[usbDetectSelfObj detectedDeviceConnection:tempUsbDevice];
 	}
-}
-
-void CUSBSignalHandler(int sigraised)
-{
-	exit(0);
 }
 @end
