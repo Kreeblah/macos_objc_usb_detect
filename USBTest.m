@@ -40,7 +40,7 @@
 
 void USBTestSignalHandler(int sigraised)
 {
-	exit(0);
+	exit(EXIT_SUCCESS);
 }
 
 int main(int argc, const char * argv[])
