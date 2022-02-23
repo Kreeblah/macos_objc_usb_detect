@@ -46,10 +46,19 @@
 	deviceRemovalObj = disconnectedDeviceObj;
 	deviceRemovalSelector = disconnectedDeviceMethod;
 
+#if __MAC_OS_X_VERSION_MIN_REQUIRED > 1050
 	for(USBDetectionDevice* tempDevice in watchedUSBDevices)
+#else
+	NSEnumerator *e = [watchedUSBDevices objectEnumerator];
+	id tempDeviceId;
+	while( (tempDeviceId = [e nextObject]) )
+#endif
 	{
 		io_iterator_t deviceIterator;
 
+#if __MAC_OS_X_VERSION_MIN_REQUIRED <= 1050
+		USBDetectionDevice* tempDevice = (USBDetectionDevice*)tempDeviceId;
+#endif
 		CFMutableDictionaryRef matchingDict = IOServiceMatching(kIOUSBDeviceClassName);
 		if (matchingDict == NULL)
 		{
@@ -107,12 +116,20 @@
 	[watchedUSBDevices removeAllObjects];
 }
 
+#if __MAC_OS_X_VERSION_MIN_REQUIRED > 1050
 -(NSMutableDictionary<NSNumber*, USBDetectionDevice*>*) getConnectedDeviceDictionary
+#else
+-(NSMutableDictionary*) getConnectedDeviceDictionary
+#endif
 {
 	return connectedUSBDevices;
 }
 
+#if __MAC_OS_X_VERSION_MIN_REQUIRED > 1050
 -(NSArray<USBDetectionDevice*>*) getConnectedDeviceArray
+#else
+-(NSArray*) getConnectedDeviceArray
+#endif
 {
 	return [connectedUSBDevices allValues];
 }

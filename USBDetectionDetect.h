@@ -27,8 +27,13 @@
 @class USBDevice;
 @interface USBDetectionDetect : NSObject
 {
+#if __MAC_OS_X_VERSION_MIN_REQUIRED > 1050
 	NSMutableDictionary<NSNumber*, USBDetectionDevice*>* connectedUSBDevices;
 	NSMutableArray<USBDetectionDevice*>* watchedUSBDevices;
+#else
+	NSMutableDictionary* connectedUSBDevices;
+	NSMutableArray* watchedUSBDevices;
+#endif
 
 	@public IONotificationPortRef ioNotificationPortRef;
 
@@ -42,8 +47,16 @@
 -(void) addWatchedDevice:(USBDetectionDevice*)device;
 -(void) addWatchedDeviceWithVendorId:(long)vendorID withProductId:(long)productID;
 -(void) clearWatchedDevices;
+#if __MAC_OS_X_VERSION_MIN_REQUIRED > 1050
 -(NSMutableDictionary<NSNumber*, USBDetectionDevice*>*) getConnectedDeviceDictionary;
 -(NSArray<USBDetectionDevice*>*) getConnectedDeviceArray;
+#else
+-(NSMutableDictionary*) getConnectedDeviceDictionary;
+-(NSArray*) getConnectedDeviceArray;
+#endif
+
+void CUSBDeviceNotification(void *refCon, io_service_t service, natural_t messageType, void *messageArgument);
+void CUSBDeviceAdded(void *refCon, io_iterator_t iterator);
 @end
 
 static USBDetectionDetect* usbDetectSelfObj;
